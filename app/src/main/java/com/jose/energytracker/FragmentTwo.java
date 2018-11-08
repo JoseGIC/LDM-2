@@ -57,7 +57,7 @@ public class FragmentTwo extends Fragment {
         EditText editText = (EditText) viewDialog.findViewById(R.id.text_nuevo_producto);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Añadir producto");
+        builder.setTitle("Crear producto");
         builder.setView(viewDialog);
         builder.setPositiveButton("Aceptar", (dialog, id) -> addItem(editText.getText().toString()));
         builder.setNegativeButton("Cancelar", null);
