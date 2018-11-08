@@ -36,12 +36,35 @@ public class FragmentOne extends Fragment {
         adapter = new ArrayAdapter<Alimento>(getActivity(), android.R.layout.simple_list_item_1, listaDiario);
 
         listView.setAdapter(adapter);
+
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            maybeRemoveItem(position);
+            return true;
+        });
+
         return rootView;
     }
 
 
     public void selectItem(FragmentTwo f2, int posicion) {
         listaDiario.add(f2.getListaProductos().get(posicion));
+        adapter.notifyDataSetChanged();
+        printKcalTotales();
+    }
+
+
+    private void maybeRemoveItem(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Quitar alimento");
+        builder.setPositiveButton("Aceptar", (dialog, id) -> removeItem(position));
+        builder.setNegativeButton("Cancelar", null);
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    public void removeItem(int pos) {
+        listaDiario.remove(pos);
         adapter.notifyDataSetChanged();
         printKcalTotales();
     }
@@ -54,7 +77,7 @@ public class FragmentOne extends Fragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Añadir producto");
+        builder.setTitle("Añadir alimento");
         builder.setItems(arrayProductos, (dialog, which) -> selectItem(f2, which));
         Dialog dialog = builder.create();
         dialog.show();

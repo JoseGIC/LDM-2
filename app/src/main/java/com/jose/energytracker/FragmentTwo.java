@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -35,11 +36,14 @@ public class FragmentTwo extends Fragment {
         adapter = new ArrayAdapter<Alimento>(getActivity(), android.R.layout.simple_list_item_1, listaAlimentos);
 
         listView.setAdapter(adapter);
+
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            maybeRemoveItem(position);
+            return true;
+        });
+
         return rootView;
     }
-
-
-
 
 
     public ArrayList<Alimento> getListaProductos() {
@@ -53,6 +57,22 @@ public class FragmentTwo extends Fragment {
     }
 
 
+    private void maybeRemoveItem(int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Eliminar alimento");
+        builder.setPositiveButton("Aceptar", (dialog, id) -> removeItem(position));
+        builder.setNegativeButton("Cancelar", null);
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    public void removeItem(int pos) {
+        listaAlimentos.remove(pos);
+        adapter.notifyDataSetChanged();
+    }
+
+
     public void fabClicked(FragmentOne f1) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -61,10 +81,11 @@ public class FragmentTwo extends Fragment {
         EditText editTextKcal = (EditText) viewDialog.findViewById(R.id.nuevo_alimento_kcal);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Crear producto");
+        builder.setTitle("Crear alimento");
         builder.setView(viewDialog);
         builder.setPositiveButton("Aceptar", (dialog, id) ->
-                addItem(new Alimento(editTextNombre.getText().toString(), Integer.parseInt(editTextKcal.getText().toString())))
+                addItem(new Alimento(editTextNombre.getText().toString(),
+                        Integer.parseInt(editTextKcal.getText().toString())))
                 );
         builder.setNegativeButton("Cancelar", null);
         Dialog dialog = builder.create();
