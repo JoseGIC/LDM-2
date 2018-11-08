@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Energy Tracker</string>
     <string name="tab_text_1">Diario</string>
-    <string name="tab_text_2">Productos</string>
+    <string name="tab_text_2">Alimentos</string>
     <string name="action_settings">Ajustes</string>
     <string name="action_help">Ayuda</string>
-    <string name="text_total">Kcal</string>
+    <string name="text_total">kcal</string>
     <string name="kcal_totales">2300</string>
+    <string name="hint_nombre">Nombre</string>
+    <string name="hint_kcal">kcal</string>
 </resources>

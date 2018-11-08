@@ -49,22 +49,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-
-        String textoPrueba;
         FragmentOne f1 = ((FragmentOne) getSupportFragmentManager().getFragments().get(0));
         FragmentTwo f2 = ((FragmentTwo) getSupportFragmentManager().getFragments().get(1));
 
         switch(view.getId()) {
-
             case R.id.fab:
                 if(mViewPager.getCurrentItem() == 0) {
-                    textoPrueba = "Se AÑADE un alimento";
                     f1.fabClicked(f2);
                 } else {
-                    textoPrueba = "Se CREA un alimento";
                     f2.fabClicked(f1);
                 }
-                Snackbar.make(view, textoPrueba, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 break;
 
             default:

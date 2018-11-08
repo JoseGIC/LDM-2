@@ -18,8 +18,8 @@ import java.util.ArrayList;
 public class FragmentTwo extends Fragment {
 
     private ListView listView;
-    private ArrayList<String> listaProductos;
-    private ArrayAdapter<String> adapter;
+    private ArrayList<Alimento> listaAlimentos;
+    private ArrayAdapter<Alimento> adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,24 +28,27 @@ public class FragmentTwo extends Fragment {
         listView = rootView.findViewById(R.id.list_view_2);
 
 
-        listaProductos = new ArrayList<>();
-        listaProductos.add("Platano");
-        listaProductos.add("Pera");
+        listaAlimentos = new ArrayList<>();
+        listaAlimentos.add(new Alimento("Platano", 50));
+        listaAlimentos.add(new Alimento("Pera", 40));
 
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, listaProductos);
+        adapter = new ArrayAdapter<Alimento>(getActivity(), android.R.layout.simple_list_item_1, listaAlimentos);
 
         listView.setAdapter(adapter);
         return rootView;
     }
 
 
-    public ArrayList<String> getListaProductos() {
-        return listaProductos;
+
+
+
+    public ArrayList<Alimento> getListaProductos() {
+        return listaAlimentos;
     }
 
 
-    public void addItem(String newItem) {
-        listaProductos.add(newItem);
+    public void addItem(Alimento alimento) {
+        listaAlimentos.add(alimento);
         adapter.notifyDataSetChanged();
     }
 
@@ -54,12 +57,15 @@ public class FragmentTwo extends Fragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View viewDialog = inflater.inflate(R.layout.new_product_dialog, null);
-        EditText editText = (EditText) viewDialog.findViewById(R.id.text_nuevo_producto);
+        EditText editTextNombre = (EditText) viewDialog.findViewById(R.id.nuevo_alimento_nombre);
+        EditText editTextKcal = (EditText) viewDialog.findViewById(R.id.nuevo_alimento_kcal);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Crear producto");
         builder.setView(viewDialog);
-        builder.setPositiveButton("Aceptar", (dialog, id) -> addItem(editText.getText().toString()));
+        builder.setPositiveButton("Aceptar", (dialog, id) ->
+                addItem(new Alimento(editTextNombre.getText().toString(), Integer.parseInt(editTextKcal.getText().toString())))
+                );
         builder.setNegativeButton("Cancelar", null);
         Dialog dialog = builder.create();
         dialog.show();
