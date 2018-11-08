@@ -33,7 +33,7 @@ public class FragmentTwo extends Fragment {
         listaAlimentos.add(new Alimento("Platano", 50));
         listaAlimentos.add(new Alimento("Pera", 40));
 
-        adapter = new ArrayAdapter<Alimento>(getActivity(), android.R.layout.simple_list_item_1, listaAlimentos);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, listaAlimentos);
 
         listView.setAdapter(adapter);
 

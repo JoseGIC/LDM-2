@@ -33,7 +33,7 @@ public class FragmentOne extends Fragment {
         //Habría que conectarse con la base de datos y actualizar la lista si se está en el mismo dia
         printKcalTotales();
 
-        adapter = new ArrayAdapter<Alimento>(getActivity(), android.R.layout.simple_list_item_1, listaDiario);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, listaDiario);
 
         listView.setAdapter(adapter);
 
