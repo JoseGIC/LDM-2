@@ -47,7 +47,7 @@ public class FragmentOne extends Fragment {
 
 
     public void selectItem(FragmentTwo f2, int posicion) {
-        listaDiario.add(f2.getListaProductos().get(posicion));
+        listaDiario.add(0, f2.getListaProductos().get(posicion));
         adapter.notifyDataSetChanged();
         printKcalTotales();
     }
@@ -58,8 +58,7 @@ public class FragmentOne extends Fragment {
         builder.setTitle("Quitar alimento");
         builder.setPositiveButton("Aceptar", (dialog, id) -> removeItem(position));
         builder.setNegativeButton("Cancelar", null);
-        Dialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 
 
@@ -79,8 +78,7 @@ public class FragmentOne extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Añadir alimento");
         builder.setItems(arrayProductos, (dialog, which) -> selectItem(f2, which));
-        Dialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 
 
@@ -90,6 +88,13 @@ public class FragmentOne extends Fragment {
             total = total + a.getKcal();
         }
         kcalTotales.setText(String.valueOf(total));
+    }
+
+
+    public void resetKcal() {
+        listaDiario.clear();
+        adapter.notifyDataSetChanged();
+        printKcalTotales();
     }
 
 

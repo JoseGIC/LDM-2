@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -51,8 +52,24 @@ public class FragmentTwo extends Fragment {
     }
 
 
+    public void maybeAddItem(EditText editTextNombre, EditText editTextKcal) {
+        String nombre = editTextNombre.getText().toString();
+        String kcal = editTextKcal.getText().toString();
+
+        if(nombre.isEmpty() || kcal.isEmpty()) {
+            Toast.makeText(getActivity(), "Debes poner nombre y calorías", Toast.LENGTH_SHORT).show();
+        } else {
+            if(alreadyInList(nombre, Integer.parseInt(kcal))) {
+                Toast.makeText(getActivity(), "El alimento ya existe", Toast.LENGTH_SHORT).show();
+            } else {
+                addItem(new Alimento(nombre, Integer.parseInt(kcal)));
+            }
+        }
+    }
+
+
     public void addItem(Alimento alimento) {
-        listaAlimentos.add(alimento);
+        listaAlimentos.add(0, alimento);
         adapter.notifyDataSetChanged();
     }
 
@@ -62,8 +79,7 @@ public class FragmentTwo extends Fragment {
         builder.setTitle("Eliminar alimento");
         builder.setPositiveButton("Aceptar", (dialog, id) -> removeItem(position));
         builder.setNegativeButton("Cancelar", null);
-        Dialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 
 
@@ -83,13 +99,19 @@ public class FragmentTwo extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Crear alimento");
         builder.setView(viewDialog);
-        builder.setPositiveButton("Aceptar", (dialog, id) ->
-                addItem(new Alimento(editTextNombre.getText().toString(),
-                        Integer.parseInt(editTextKcal.getText().toString())))
-                );
+        builder.setPositiveButton("Aceptar", (dialog, id) -> maybeAddItem(editTextNombre, editTextKcal));
         builder.setNegativeButton("Cancelar", null);
-        Dialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
+    }
+
+
+    public boolean alreadyInList(String nombre, int kcal) {
+        for(Alimento a: listaAlimentos) {
+            if(a.getNombre().toString().equals(nombre) && a.getKcal() == kcal) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
