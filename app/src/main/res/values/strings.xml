@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Energy Tracker</string>
+    <string name="app_name">Energeat</string>
     <string name="tab_text_1">Diario</string>
     <string name="tab_text_2">Alimentos</string>
     <string name="action_reset">Reiniciar diario</string>

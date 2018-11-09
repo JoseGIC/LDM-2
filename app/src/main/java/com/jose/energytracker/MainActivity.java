@@ -1,6 +1,8 @@
 package com.jose.energytracker;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,10 +14,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import java.util.zip.Inflater;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -83,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (itemId) {
             case R.id.action_reset:
                 FragmentOne f1 = ((FragmentOne) getSupportFragmentManager().getFragments().get(0));
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Reiniciar diario");
                 builder.setMessage(R.string.reset_mensaje);
@@ -93,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.action_help:
-                Toast.makeText(this, "Sale el layout de ayuda", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, HelpActivity.class);
+                startActivity(intent);
                 break;
 
             default:
