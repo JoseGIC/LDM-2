@@ -86,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId) {
+            case R.id.action_objetive:
+                //editar objetivo
+                break;
+
             case R.id.action_reset:
                 FragmentOne f1 = ((FragmentOne) getSupportFragmentManager().getFragments().get(0));
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

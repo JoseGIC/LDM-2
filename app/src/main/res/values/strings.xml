@@ -2,6 +2,7 @@
     <string name="app_name">Energeat</string>
     <string name="tab_text_1">Diario</string>
     <string name="tab_text_2">Alimentos</string>
+    <string name="action_objetive">Reiniciar diario</string>
     <string name="action_reset">Reiniciar diario</string>
     <string name="action_help">Ayuda</string>
     <string name="text_total">kcal</string>
