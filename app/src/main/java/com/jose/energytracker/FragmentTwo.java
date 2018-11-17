@@ -51,7 +51,7 @@ public class FragmentTwo extends Fragment {
 
         //Sonidos
         sp1= new SoundPool(1, AudioManager.STREAM_MUSIC,1);
-        sonidofab = sp1.load(getContext(), R.raw.anadir, 1);
+        sonidofab = sp1.load(getContext(), R.raw.fab, 1);
 
         return rootView;
     }
@@ -132,6 +132,7 @@ public class FragmentTwo extends Fragment {
     public void fabClicked() {
         //Efecto de sonido del fab
         sp1.play(sonidofab,1,1,1,0,0);
+        //
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View viewDialog = inflater.inflate(R.layout.new_product_dialog, null);

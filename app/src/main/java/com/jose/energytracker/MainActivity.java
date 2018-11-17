@@ -85,14 +85,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
+        FragmentOne f1;
+        AlertDialog.Builder builder;
+
         switch (itemId) {
             case R.id.action_objetive:
                 //editar objetivo
+                f1 = ((FragmentOne) getSupportFragmentManager().getFragments().get(0));
+                builder = new AlertDialog.Builder(this);
+                builder.setTitle("Fijar un objetivo");
+                builder.setMessage("¡Tu marcas tus metas! Te avisaremos cuando llegues a tus kcal objetivo");
+                builder.create().show();
                 break;
 
             case R.id.action_reset:
-                FragmentOne f1 = ((FragmentOne) getSupportFragmentManager().getFragments().get(0));
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                f1 = ((FragmentOne) getSupportFragmentManager().getFragments().get(0));
+                builder = new AlertDialog.Builder(this);
                 builder.setTitle("Reiniciar diario");
                 builder.setMessage(R.string.reset_mensaje);
                 builder.setPositiveButton("Aceptar", (dialog, id) -> f1.resetDay());
