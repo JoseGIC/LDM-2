@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(mViewPager.getCurrentItem() == 0) {
                     f1.fabClicked(f2);
                 } else {
-                    f2.fabClicked(f1);
+                    f2.fabClicked();
                 }
                 break;
 
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Reiniciar diario");
                 builder.setMessage(R.string.reset_mensaje);
-                builder.setPositiveButton("Aceptar", (dialog, id) -> f1.resetKcal());
+                builder.setPositiveButton("Aceptar", (dialog, id) -> f1.resetDay());
                 builder.setNegativeButton("Cancelar", null);
                 builder.create().show();
                 break;

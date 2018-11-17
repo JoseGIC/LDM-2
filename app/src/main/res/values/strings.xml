@@ -2,7 +2,7 @@
     <string name="app_name">Energeat</string>
     <string name="tab_text_1">Diario</string>
     <string name="tab_text_2">Alimentos</string>
-    <string name="action_objetive">Reiniciar diario</string>
+    <string name="action_objetive">Objetivo</string>
     <string name="action_reset">Reiniciar diario</string>
     <string name="action_help">Ayuda</string>
     <string name="text_total">kcal</string>
@@ -10,4 +10,6 @@
     <string name="hint_nombre">Nombre</string>
     <string name="hint_kcal">kcal</string>
     <string name="reset_mensaje">Se borrarán todos los alimentos de la pestaña Diario y las calorías</string>
+    <string name="text_help">Energeat es la app que te permite llevar un registro de las kcal que ingieres a lo largo del dia de la manera más simple y ordenada! \n  \n  \n ¿Como funciona?  \n  \n-En la pestaña ALIMENTOS puedes registrar nuevos alimentos en la base de datos de Energeat para añadirlos posteriormente a tu diario de alimentos en la pestaña DIARIO. \n  \n-También es posible fijar metas para mantener siempre tu motivación al máximo!</string>
+    <string name="text_contact">Si quieres contactar con el Servicio de Atención al cliente de Energeat: \n energeat.support@gmail.com</string>
 </resources>

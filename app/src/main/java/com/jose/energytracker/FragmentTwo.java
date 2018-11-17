@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,21 +24,20 @@ import java.util.ArrayList;
 
 public class FragmentTwo extends Fragment {
 
-    private ListView listView;
     private ArrayList<Alimento> listaAlimentos;
     private ArrayAdapter<Alimento> adapter;
+    private String TABLE_2 = "alimentos";
+    private SoundPool sp1;
+    private int sonidofab;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_two, container, false);
 
-        listView = rootView.findViewById(R.id.list_view_2);
-
+        ListView listView = rootView.findViewById(R.id.list_view_2);
 
         listaAlimentos = new ArrayList<>();
-
-
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, listaAlimentos);
 
         listView.setAdapter(adapter);
@@ -48,6 +49,10 @@ public class FragmentTwo extends Fragment {
 
         createListFromBD();
 
+        //Sonidos
+        sp1= new SoundPool(1, AudioManager.STREAM_MUSIC,1);
+        sonidofab = sp1.load(getContext(), R.raw.anadir, 1);
+
         return rootView;
     }
 
@@ -58,14 +63,14 @@ public class FragmentTwo extends Fragment {
 
 
     public SQLiteDatabase getDB() {
-        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getContext(), "gestion", null, 1);
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getContext(), "gestion2", null, 1);
         return admin.getWritableDatabase();
     }
 
 
     public void createListFromBD() {
         SQLiteDatabase db = getDB();
-        Cursor c = db.query("alimentos", new String[] {"nombre", "kcal"}, null, null, null, null, null);
+        Cursor c = db.query(TABLE_2, new String[] {"nombre", "kcal"}, null, null, null, null, null);
         while(c.moveToNext()){
             listaAlimentos.add(0, new Alimento(c.getString(0), Integer.parseInt(c.getString(1))));
         }
@@ -97,7 +102,7 @@ public class FragmentTwo extends Fragment {
         reg.put("kcal", alimento.getKcal());
 
         SQLiteDatabase db = getDB();
-        db.insert("alimentos", null, reg);
+        db.insert(TABLE_2, null, reg);
         db.close();
 
         listaAlimentos.add(0, alimento);
@@ -116,7 +121,7 @@ public class FragmentTwo extends Fragment {
 
     public void removeItem(int pos) {
         SQLiteDatabase db = getDB();
-        db.delete("alimentos", "nombre='" + listaAlimentos.get(pos).getNombre() + "'", null);
+        db.delete(TABLE_2, "nombre='" + listaAlimentos.get(pos).getNombre() + "'", null);
         db.close();
 
         listaAlimentos.remove(pos);
@@ -124,7 +129,10 @@ public class FragmentTwo extends Fragment {
     }
 
 
-    public void fabClicked(FragmentOne f1) {
+    public void fabClicked() {
+        //Efecto de sonido del fab
+        sp1.play(sonidofab,1,1,1,0,0);
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View viewDialog = inflater.inflate(R.layout.new_product_dialog, null);
         EditText editTextNombre = (EditText) viewDialog.findViewById(R.id.nuevo_alimento_nombre);

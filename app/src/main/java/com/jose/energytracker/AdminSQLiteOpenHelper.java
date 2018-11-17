@@ -16,11 +16,11 @@ public class AdminSQLiteOpenHelper  extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase bd) {
         bd.execSQL("create table alimentos (nombre String primary key, kcal int)");
-        bd.execSQL("create table diario (nombre String primary key, kcal int)");
+        bd.execSQL("create table diario (nombre String primary key, kcal int, uds int)");
     }
 
-
-    public void onUpgrade(SQLiteDatabase bd, int oldVersion, int newVersion) {}
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
 
 }
