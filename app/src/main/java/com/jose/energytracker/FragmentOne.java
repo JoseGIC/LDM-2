@@ -200,6 +200,9 @@ public class FragmentOne extends Fragment {
         if(total >= objetivo && objetivo != 0) {
             //Efecto de sonido del goal
             sp1.play(sonidoWin, 1, 1, 1, 0, 0);
+            //
+
+            Toast.makeText(getContext(), "¡Enhorabuena! Has alcanzado tu objetivo :)", Toast.LENGTH_LONG).show();
         }
     }
 
