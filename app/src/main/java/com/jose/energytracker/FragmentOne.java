@@ -31,6 +31,8 @@ public class FragmentOne extends Fragment {
     private SoundPool sp1;
     private int sonidofab;
     private int sonidoadd;
+    private int sonidodelete;
+    private int sonidoreiniciar;
 
 
     @Override
@@ -54,8 +56,10 @@ public class FragmentOne extends Fragment {
 
         //Sonidos
         sp1= new SoundPool(1, AudioManager.STREAM_MUSIC,1);
-        sonidofab = sp1.load(getContext(), R.raw.anadir, 1);
+        sonidofab = sp1.load(getContext(), R.raw.fab, 1);
         sonidoadd = sp1.load(getContext(), R.raw.mordisco, 1);
+        sonidodelete= sp1.load(getContext(),R.raw.delete, 1);
+        sonidoreiniciar= sp1.load(getContext(),R.raw.reiniciar, 1);
 
         return rootView;
     }
@@ -66,6 +70,8 @@ public class FragmentOne extends Fragment {
     public void fabClicked(FragmentTwo f2) {
         //Efecto de sonido del fab
         sp1.play(sonidofab,1,1,1,0,0);
+        //
+
         String[] arrayProductos = new String[f2.getListaProductos().size()];
         for(int i = 0; i < f2.getListaProductos().size(); i++) {
             arrayProductos[i] = f2.getListaProductos().get(i).toString();
@@ -105,10 +111,13 @@ public class FragmentOne extends Fragment {
             addItemToDB(alimento);
         }
 
-        adapter.notifyDataSetChanged();
-        printKcalTotales();
         //Efecto de sonido del add
         sp1.play(sonidoadd,1,1,1,0,0);
+        //
+
+        adapter.notifyDataSetChanged();
+        printKcalTotales();
+
     }
 
 
@@ -130,6 +139,10 @@ public class FragmentOne extends Fragment {
             removeItemFromDB(alimento);
         }
 
+        //Efecto de sonido del delete
+        sp1.play(sonidodelete,1,1,1,0,0);
+        //
+
         adapter.notifyDataSetChanged();
         printKcalTotales();
     }
@@ -143,6 +156,10 @@ public class FragmentOne extends Fragment {
 
 
     public void resetDay() {
+        //Efecto de sonido del reset
+        sp1.play(sonidoreiniciar,1,1,1,0,0);
+        //
+
         clearDB();
         listaDiario.clear();
         adapter.notifyDataSetChanged();
