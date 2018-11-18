@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.zip.Inflater;
@@ -93,8 +94,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //editar objetivo
                 f1 = ((FragmentOne) getSupportFragmentManager().getFragments().get(0));
                 builder = new AlertDialog.Builder(this);
+                LayoutInflater inflater = this.getLayoutInflater();
+                View viewDialog = inflater.inflate(R.layout.new_goal_dialog, null);
+                //EditText editTextNombre = (EditText) viewDialog.findViewById(R.id.nueva_meta);
+
                 builder.setTitle("Fijar un objetivo");
+                builder.setView(viewDialog);
                 builder.setMessage("¡Tu marcas tus metas! Te avisaremos cuando llegues a tus kcal objetivo");
+                builder.setPositiveButton("Aceptar", null);
+                builder.setNegativeButton("Cancelar", null);
                 builder.create().show();
                 break;
 
