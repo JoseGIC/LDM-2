@@ -96,12 +96,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 builder = new AlertDialog.Builder(this);
                 LayoutInflater inflater = this.getLayoutInflater();
                 View viewDialog = inflater.inflate(R.layout.new_goal_dialog, null);
-                //EditText editTextNombre = (EditText) viewDialog.findViewById(R.id.nueva_meta);
+                EditText editTextGoal = (EditText) viewDialog.findViewById(R.id.new_goal);
 
                 builder.setTitle("Fijar un objetivo");
                 builder.setView(viewDialog);
                 builder.setMessage("¡Tu marcas tus metas! Te avisaremos cuando llegues a tus kcal objetivo");
-                builder.setPositiveButton("Aceptar", null);
+                builder.setPositiveButton("Aceptar", (dialog, id) -> f1.maybeSetGoal(editTextGoal));
                 builder.setNegativeButton("Cancelar", null);
                 builder.create().show();
                 break;

@@ -28,7 +28,9 @@ public class FragmentTwo extends Fragment {
     private ArrayAdapter<Alimento> adapter;
     private String TABLE_2 = "alimentos";
     private SoundPool sp1;
-    private int sonidofab;
+    private int sonidoFab;
+    private int sonidoAdd;
+    private int sonidoDelete;
 
 
     @Override
@@ -51,7 +53,9 @@ public class FragmentTwo extends Fragment {
 
         //Sonidos
         sp1= new SoundPool(1, AudioManager.STREAM_MUSIC,1);
-        sonidofab = sp1.load(getContext(), R.raw.fab, 1);
+        sonidoFab = sp1.load(getContext(), R.raw.fab, 1);
+        sonidoAdd = sp1.load(getContext(), R.raw.mordisco, 1);
+        sonidoDelete= sp1.load(getContext(),R.raw.delete, 1);
 
         return rootView;
     }
@@ -83,14 +87,15 @@ public class FragmentTwo extends Fragment {
     public void maybeAddItem(EditText editTextNombre, EditText editTextKcal) {
         String nombre = editTextNombre.getText().toString();
         String kcal = editTextKcal.getText().toString();
+        Alimento alimento = new Alimento(nombre, Integer.parseInt(kcal));
 
         if(nombre.isEmpty() || kcal.isEmpty()) {
             Toast.makeText(getActivity(), "Debes poner nombre y calorías", Toast.LENGTH_SHORT).show();
         } else {
-            if(alreadyInList(nombre, Integer.parseInt(kcal))) {
+            if(alreadyInList(alimento)) {
                 Toast.makeText(getActivity(), "El alimento ya existe", Toast.LENGTH_SHORT).show();
             } else {
-                addItem(new Alimento(nombre, Integer.parseInt(kcal)));
+                addItem(alimento);
             }
         }
     }
@@ -104,6 +109,8 @@ public class FragmentTwo extends Fragment {
         SQLiteDatabase db = getDB();
         db.insert(TABLE_2, null, reg);
         db.close();
+
+        sp1.play(sonidoAdd, 1, 1, 1, 0, 0);
 
         listaAlimentos.add(0, alimento);
         adapter.notifyDataSetChanged();
@@ -124,6 +131,8 @@ public class FragmentTwo extends Fragment {
         db.delete(TABLE_2, "nombre='" + listaAlimentos.get(pos).getNombre() + "'", null);
         db.close();
 
+        sp1.play(sonidoDelete, 1, 1, 1, 0, 0);
+
         listaAlimentos.remove(pos);
         adapter.notifyDataSetChanged();
     }
@@ -131,7 +140,7 @@ public class FragmentTwo extends Fragment {
 
     public void fabClicked() {
         //Efecto de sonido del fab
-        sp1.play(sonidofab,1,1,1,0,0);
+        sp1.play(sonidoFab,1,1,1,0,0);
         //
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -148,9 +157,9 @@ public class FragmentTwo extends Fragment {
     }
 
 
-    public boolean alreadyInList(String nombre, int kcal) {
+    public boolean alreadyInList(Alimento alimento) {
         for(Alimento a: listaAlimentos) {
-            if(a.getNombre().equals(nombre) && a.getKcal() == kcal) {
+            if(a.equals(alimento)) {
                 return true;
             }
         }

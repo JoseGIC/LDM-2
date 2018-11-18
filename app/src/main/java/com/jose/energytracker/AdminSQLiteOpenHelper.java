@@ -17,11 +17,11 @@ public class AdminSQLiteOpenHelper  extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase bd) {
         bd.execSQL("create table alimentos (nombre String primary key, kcal int)");
         bd.execSQL("create table diario (nombre String primary key, kcal int, uds int)");
+        bd.execSQL("create table objetivo (goal int primary key)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
         db.execSQL("drop table if exists diario");
         onCreate(db);
     }
