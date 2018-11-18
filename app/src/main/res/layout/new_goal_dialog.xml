@@ -5,12 +5,12 @@
     android:layout_height="wrap_content">
 
     <EditText
-        android:id="@+id/nueva_meta"
+        android:id="@+id/new_goal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="80dp"
         android:hint="@string/hint_kcal"
-        android:inputType="text" />
+        android:inputType="number" />
 
 </LinearLayout>

@@ -15,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -25,20 +27,24 @@ import java.util.logging.Logger;
 public class FragmentOne extends Fragment {
 
     private TextView kcalTotales;
+    private TextView goal;
     private ArrayList<Alimento> listaDiario;
     private ArrayAdapter<Alimento> adapter;
     private String TABLE_1 = "diario";
+    private String TABLE_3 = "objetivo";
     private SoundPool sp1;
-    private int sonidofab;
-    private int sonidoadd;
-    private int sonidodelete;
-    private int sonidoreiniciar;
+    private int sonidoFab;
+    private int sonidoAdd;
+    private int sonidoDelete;
+    private int sonidoReiniciar;
+    private int sonidoWin;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_one, container, false);
 
+        goal = rootView.findViewById(R.id.goal);
         kcalTotales = rootView.findViewById(R.id.kcal_totales);
         ListView listView = rootView.findViewById(R.id.list_view_1);
 
@@ -51,25 +57,44 @@ public class FragmentOne extends Fragment {
             return true;
         });
 
-        updateListFromBD();
-        printKcalTotales();
 
         //Sonidos
         sp1= new SoundPool(1, AudioManager.STREAM_MUSIC,1);
-        sonidofab = sp1.load(getContext(), R.raw.fab, 1);
-        sonidoadd = sp1.load(getContext(), R.raw.mordisco, 1);
-        sonidodelete= sp1.load(getContext(),R.raw.delete, 1);
-        sonidoreiniciar= sp1.load(getContext(),R.raw.reiniciar, 1);
+        sonidoFab = sp1.load(getContext(), R.raw.fab, 1);
+        sonidoAdd = sp1.load(getContext(), R.raw.mordisco, 1);
+        sonidoDelete= sp1.load(getContext(),R.raw.delete, 1);
+        sonidoReiniciar= sp1.load(getContext(),R.raw.reiniciar, 1);
+        sonidoWin = sp1.load(getContext(), R.raw.win, 1);
+
+
+        updateGoalFromDB();
+        updateListFromBD();
+        printKcalTotales();
 
         return rootView;
     }
 
 
+    public void maybeSetGoal(EditText editTextGoal) {
+        String newGoal = editTextGoal.getText().toString();
+
+        if(newGoal.isEmpty()) {
+            Toast.makeText(getActivity(), "Debes poner un objetivo", Toast.LENGTH_SHORT).show();
+        } else {
+            setGoal(newGoal);
+            updateDBFromGoal();
+        }
+    }
+
+
+    public void setGoal(String newGoal) {
+        goal.setText(newGoal);
+    }
 
 
     public void fabClicked(FragmentTwo f2) {
         //Efecto de sonido del fab
-        sp1.play(sonidofab,1,1,1,0,0);
+        sp1.play(sonidoFab, 1, 1, 1, 0, 0);
         //
 
         String[] arrayProductos = new String[f2.getListaProductos().size()];
@@ -102,7 +127,7 @@ public class FragmentOne extends Fragment {
             for(Alimento a: listaDiario) {
                 if(a.equals(alimento)) {
                     a.incrementUds();
-                    updateItemFromDB(a);
+                    updateItemInDB(a);
                     break;
                 }
             }
@@ -112,8 +137,7 @@ public class FragmentOne extends Fragment {
         }
 
         //Efecto de sonido del add
-        sp1.play(sonidoadd,1,1,1,0,0);
-        //
+        sp1.play(sonidoAdd, 1, 1, 1, 0, 0);
 
         adapter.notifyDataSetChanged();
         printKcalTotales();
@@ -133,15 +157,14 @@ public class FragmentOne extends Fragment {
 
         if(alimento.getUds() > 1) {
             alimento.decrementUds();
-            updateItemFromDB(alimento);
+            updateItemInDB(alimento);
         } else {
             removeItemFromList(position);
             removeItemFromDB(alimento);
         }
 
         //Efecto de sonido del delete
-        sp1.play(sonidodelete,1,1,1,0,0);
-        //
+        sp1.play(sonidoDelete, 1, 1, 1, 0, 0);
 
         adapter.notifyDataSetChanged();
         printKcalTotales();
@@ -157,10 +180,9 @@ public class FragmentOne extends Fragment {
 
     public void resetDay() {
         //Efecto de sonido del reset
-        sp1.play(sonidoreiniciar,1,1,1,0,0);
-        //
+        sp1.play(sonidoReiniciar, 1, 1, 1, 0, 0);
 
-        clearDB();
+        clearDB(TABLE_1);
         listaDiario.clear();
         adapter.notifyDataSetChanged();
         printKcalTotales();
@@ -173,6 +195,12 @@ public class FragmentOne extends Fragment {
             total = total + a.getKcal() * a.getUds();
         }
         kcalTotales.setText(String.valueOf(total));
+
+        int objetivo = Integer.parseInt(goal.getText().toString());
+        if(total >= objetivo && objetivo != 0) {
+            //Efecto de sonido del goal
+            sp1.play(sonidoWin, 1, 1, 1, 0, 0);
+        }
     }
 
 
@@ -224,10 +252,37 @@ public class FragmentOne extends Fragment {
 
 
     public void updateDBFromList() {
-        clearDB();
+        clearDB(TABLE_1);
         for(Alimento alimento: listaDiario) {
             addItemToDB(alimento);
         }
+    }
+
+
+    public void updateGoalFromDB() {
+        SQLiteDatabase db = getDB();
+        Cursor c = db.query(TABLE_3, new String[] {"goal"}, null, null, null, null, null);
+        c.moveToFirst();
+
+        if(c.getCount() != 0) {
+            int kcal_goal = c.getInt(0);
+            setGoal(String.valueOf(kcal_goal));
+        } else {
+            setGoal("0");
+        }
+        c.close();
+        db.close();
+    }
+
+
+    public void updateDBFromGoal() {
+        clearDB(TABLE_3);
+        ContentValues reg = new ContentValues();
+        reg.put("goal", goal.getText().toString());
+
+        SQLiteDatabase db = getDB();
+        db.insert(TABLE_3, null, reg);
+        db.close();
     }
 
 
@@ -250,7 +305,7 @@ public class FragmentOne extends Fragment {
     }
 
 
-    public void updateItemFromDB(Alimento alimento) {
+    public void updateItemInDB(Alimento alimento) {
         ContentValues reg = new ContentValues();
         reg.put("nombre", alimento.getNombre());
         reg.put("kcal", alimento.getKcal());
@@ -262,9 +317,9 @@ public class FragmentOne extends Fragment {
     }
 
 
-    public void clearDB() {
+    public void clearDB(String table) {
         SQLiteDatabase db = getDB();
-        db.delete(TABLE_1, null, null);
+        db.delete(table, null, null);
         db.close();
     }
 
